@@ -22,11 +22,17 @@ class HomeHeader extends StatelessWidget {
             children: [
               TextButton(
                 onPressed: () async {
-                  DateTime? pickedDate = await showDatePicker(
+                  // DateTime? pickedDate = await showDatePicker(
+                  //   context: context,
+                  //   initialDate: date,
+                  //   firstDate: DateTime(2020),
+                  //   lastDate: DateTime(2050),
+                  // );
+                  final pickedDate = await showDialog(
                     context: context,
-                    initialDate: date,
-                    firstDate: DateTime(2020),
-                    lastDate: DateTime(2050),
+                    builder: (context) => CalendarDialog(
+                      startDate: state.date,
+                    ),
                   );
                   if (pickedDate != null) {
                     animatePageFunc(from: state.date, to: pickedDate);

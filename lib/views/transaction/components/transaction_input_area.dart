@@ -68,7 +68,7 @@ class _TransactionInputAreaState extends State<TransactionInputArea> {
                   radius: 100,
                   backgroundColor: const Color.fromARGB(0, 0, 0, 0),
                   foregroundImage:
-                      AssetImage('img/2.0x/${state.category.img}.png')),
+                      AssetImage('img/3.0x/${state.category.img}.png')),
               16.vSpace,
               Focus(
                 onFocusChange: (onFocus) {
@@ -123,12 +123,11 @@ class _TransactionInputAreaState extends State<TransactionInputArea> {
               ),
               TextButton(
                 onPressed: () async {
-                  final pickedDate = await showDatePicker(
-                    context: context,
-                    initialDate: state.date,
-                    firstDate: DateTime(2020),
-                    lastDate: DateTime(2050),
-                  );
+                  final pickedDate = await showDialog(
+                      context: context,
+                      builder: (context) =>
+                          CalendarDialog(startDate: state.date));
+
                   if (pickedDate != null) {
                     bloc.add(TransactionUpdateDate(date: pickedDate));
                   }
