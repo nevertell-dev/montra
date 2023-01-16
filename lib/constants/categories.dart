@@ -1,4 +1,4 @@
-import 'package:montra/models/category.dart';
+import '../models/category.dart';
 
 final incomes = <Income>{
   Income('Other', 'other_income'),
