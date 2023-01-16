@@ -24,8 +24,8 @@ class CalendarDay extends StatelessWidget {
   }
 }
 
-class CalendarGrid extends StatelessWidget {
-  const CalendarGrid({
+class CalendarDayGrid extends StatelessWidget {
+  const CalendarDayGrid({
     Key? key,
     required this.date,
     required this.changeDate,
@@ -44,20 +44,16 @@ class CalendarGrid extends StatelessWidget {
     return GridView.count(
       crossAxisCount: 7,
       children: List<Widget>.generate(days + dayOffset, (index) {
+        int day = index + 1;
+
         if (dayFirst < 7) {
           if (index < dayFirst) {
             return const SizedBox();
           }
-          final day = index - dayFirst;
-          return CalendarTile(
-            day: day,
-            isSelected: day == date.day,
-            isToday: isSameMonth && date.day == today,
-            changeDate: changeDate,
-          );
+          day = day - dayFirst;
         }
-        final day = index + 1;
-        return CalendarTile(
+
+        return CalendarDayTile(
           day: day,
           isSelected: day == date.day,
           isToday: isSameMonth && day == today,
@@ -68,8 +64,8 @@ class CalendarGrid extends StatelessWidget {
   }
 }
 
-class CalendarTile extends StatelessWidget {
-  const CalendarTile({
+class CalendarDayTile extends StatelessWidget {
+  const CalendarDayTile({
     Key? key,
     required this.day,
     required this.isSelected,
@@ -84,9 +80,9 @@ class CalendarTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final fontSize = isSelected || isToday ? 20.0 : 14.0;
     final fontWeight =
         isSelected || isToday ? FontWeight.w900 : FontWeight.w400;
-    final fontSize = isSelected || isToday ? 20.0 : 14.0;
     final fontColor = isSelected
         ? onContainerGreen
         : isToday

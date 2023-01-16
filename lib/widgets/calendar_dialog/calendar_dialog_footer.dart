@@ -1,7 +1,7 @@
 part of 'package:montra/widgets/calendar_dialog/calendar_dialog.dart';
 
-class CalendarFooter extends StatelessWidget {
-  const CalendarFooter({
+class CalendarDialogFooter extends StatelessWidget {
+  const CalendarDialogFooter({
     Key? key,
     required this.date,
   }) : super(key: key);
