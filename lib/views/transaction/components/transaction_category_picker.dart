@@ -27,14 +27,11 @@ class TransactionCategoryPicker extends StatelessWidget {
               child: Scaffold(
                 appBar: TabBar(
                   overlayColor: MaterialStateColor.resolveWith((states) {
-                    if (states.contains(MaterialState.hovered)) {
-                      return const Color.fromARGB(0, 0, 0, 0);
-                    }
-                    return const Color.fromARGB(0, 0, 0, 0);
+                    return Colors.transparent;
                   }),
                   labelColor: onContainerGreen,
                   labelStyle: _textStyle,
-                  unselectedLabelColor: justBlack,
+                  unselectedLabelColor: onContainerBlue,
                   unselectedLabelStyle: _unselectedTextStyle,
                   indicator: BoxDecoration(
                       color: containerGreen,
@@ -87,23 +84,27 @@ class CategoryTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
+      splashColor: containerGreen,
+      borderRadius: BorderRadius.circular(12.0),
       onTap: (() {
         context
             .read<TransactionBloc>()
             .add(TransactionUpdateCategory(category: category));
         Navigator.pop(context);
       }),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          children: [
-            CircleAvatar(
-                backgroundColor: const Color.fromARGB(0, 0, 0, 0),
-                foregroundImage: AssetImage('img/${category.img}.png')),
-            16.hSpace,
-            Text(category.title),
-          ],
+      child: Ink(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  foregroundImage: AssetImage('img/${category.img}.png')),
+              16.hSpace,
+              Text(category.title),
+            ],
+          ),
         ),
       ),
     );
