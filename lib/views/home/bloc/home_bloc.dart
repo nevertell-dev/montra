@@ -46,7 +46,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         daysInMonth: daysInMonth,
         daily: dailyRecord,
         monthly: monthlyRecord,
-        transactions: getTransactions(from: dailyRecord),
+        transactions: _getTransactions(from: dailyRecord),
       ));
     } else if (event is HomeDeleteTransaction) {
       final date = event.transaction.date;
@@ -65,13 +65,13 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           date: date,
           daily: dailyRecord,
           monthly: monthlyRecord,
-          transactions: getTransactions(from: dailyRecord),
+          transactions: _getTransactions(from: dailyRecord),
         ));
       }
     }
   }
 
-  List<Transaction?> getTransactions({Daily? from}) {
+  List<Transaction?> _getTransactions({Daily? from}) {
     final transactions = from?.transactions
         .map((e) => transactionService.readTransaction(e))
         .toList();

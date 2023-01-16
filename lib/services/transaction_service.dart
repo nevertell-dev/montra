@@ -150,19 +150,19 @@ class TransactionService {
     );
   }
 
-  Iterable<Transaction?> _getTransactions(Set<int> keys) {
+  Iterable<Transaction?> getTransactions(Set<int> keys) {
     return keys
         .map((key) => readTransaction(key))
         .where((element) => element != null);
   }
 
-  Iterable<Daily?> _getDailyTransaction(Set<int> keys) {
+  Iterable<Daily?> getDailyTransaction(Set<int> keys) {
     return keys
         .map((key) => readDaily(key))
         .where((element) => element != null);
   }
 
-  Iterable<Monthly?> _getMonthlyTransaction(Set<int> keys) {
+  Iterable<Monthly?> getMonthlyTransaction(Set<int> keys) {
     return keys
         .map((key) => readMonthly(key))
         .where((element) => element != null);
@@ -173,25 +173,25 @@ class TransactionService {
 
     // query to unpack all transaction and add to var allTransactions
     if (T == Daily) {
-      allTransactions.addAll(_getTransactions(keys));
+      allTransactions.addAll(getTransactions(keys));
     } else if (T == Monthly) {
-      final dailyTransactions = _getDailyTransaction(keys);
+      final dailyTransactions = getDailyTransaction(keys);
 
       for (final daily in dailyTransactions) {
         final transactions =
-            _getTransactions(daily?.transactions.toSet() ?? <int>{});
+            getTransactions(daily?.transactions.toSet() ?? <int>{});
         allTransactions.addAll(transactions);
       }
     } else if (T == Yearly) {
-      final monthlyTransactions = _getMonthlyTransaction(keys);
+      final monthlyTransactions = getMonthlyTransaction(keys);
 
       for (final monthly in monthlyTransactions) {
         final dailyTransactions =
-            _getDailyTransaction(monthly?.transactions.toSet() ?? <int>{});
+            getDailyTransaction(monthly?.transactions.toSet() ?? <int>{});
 
         for (final daily in dailyTransactions) {
           final transactions =
-              _getTransactions(daily?.transactions.toSet() ?? <int>{});
+              getTransactions(daily?.transactions.toSet() ?? <int>{});
           allTransactions.addAll(transactions);
         }
       }
@@ -209,7 +209,7 @@ class TransactionService {
     };
   }
 
-  /// return <list>[int T, highest T]
+  /// return <list>[total T, highest T]
   List<double> _getReport<T extends Category>(
       {required List<Transaction?> on}) {
     final amounts = on

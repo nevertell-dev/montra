@@ -46,19 +46,29 @@ class HomeHeader extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                    color: monthlyBalance > 0 ? containerGreen : containerRed,
-                    borderRadius: const BorderRadius.all(Radius.circular(16))),
-                child: Text(monthlyBalance.formatted,
-                    style: TextStyle(
-                      color: monthlyBalance > 0
-                          ? onContainerGreen
-                          : onContainerRed,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.w900,
-                    )),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RecapView(date: date),
+                      ));
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                      color: monthlyBalance > 0 ? containerGreen : containerRed,
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(16))),
+                  child: Text(monthlyBalance.formatted,
+                      style: TextStyle(
+                        color: monthlyBalance > 0
+                            ? onContainerGreen
+                            : onContainerRed,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w900,
+                      )),
+                ),
               ),
             ],
           );
