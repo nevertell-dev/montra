@@ -25,14 +25,21 @@ class CalendarDialog extends StatefulWidget {
   State<CalendarDialog> createState() => _CalendarDialogState();
 }
 
-class _CalendarDialogState extends State<CalendarDialog> {
+class _CalendarDialogState extends State<CalendarDialog>
+    with TickerProviderStateMixin {
   late DateTime date;
   late CalendarState state;
+  late final AnimationController _controller;
 
   @override
   void initState() {
     date = widget.startDate ?? DateTime.now();
     state = CalendarState.pickDay;
+    _controller = AnimationController(
+      duration: 300.millisecond,
+      vsync: this,
+    );
+    _controller.forward();
     super.initState();
   }
 
@@ -44,7 +51,9 @@ class _CalendarDialogState extends State<CalendarDialog> {
 
   void changeState(CalendarState newState) {
     setState(() {
+      _controller.reset();
       state = newState;
+      _controller.forward();
     });
   }
 
@@ -83,7 +92,15 @@ class _CalendarDialogState extends State<CalendarDialog> {
             state == CalendarState.pickDay
                 ? const CalendarDay()
                 : const SizedBox(height: 16.0),
-            Expanded(child: getCalendarGrid()),
+            Expanded(
+              child: FadeTransition(
+                opacity: CurvedAnimation(
+                  curve: Curves.easeInOut,
+                  parent: _controller,
+                ),
+                child: getCalendarGrid(),
+              ),
+            ),
             CalendarDialogFooter(date: date)
           ],
         ),

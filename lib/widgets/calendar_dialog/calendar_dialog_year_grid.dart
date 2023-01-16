@@ -15,6 +15,7 @@ class CalendarYearGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
+      childAspectRatio: 1.5,
       crossAxisCount: 3,
       children: List<Widget>.generate(9, (index) {
         final currentYear = DateTime.now().year;

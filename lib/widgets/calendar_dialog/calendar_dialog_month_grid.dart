@@ -1,27 +1,12 @@
 part of 'package:montra/widgets/calendar_dialog/calendar_dialog.dart';
 
 class CalendarMonthGrid extends StatelessWidget {
-  CalendarMonthGrid({
+  const CalendarMonthGrid({
     Key? key,
     required this.date,
     required this.changeDate,
     required this.changeState,
   }) : super(key: key);
-
-  final List<String> months = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'Mei',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ];
 
   final DateTime date;
   final Function({int? day, int? month, int? year}) changeDate;
@@ -30,13 +15,14 @@ class CalendarMonthGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GridView.count(
-      crossAxisCount: 4,
-      children: List<Widget>.generate(months.length, (index) {
+      crossAxisCount: 3,
+      childAspectRatio: 2,
+      children: List<Widget>.generate(12, (index) {
         final currentMonth = DateTime.now().month;
         final month = index + 1;
         return CalendarMonthTile(
+          monthName: DateFormat.MMM().format(date.setMonth(to: month)),
           month: month,
-          title: months[index],
           isSelected: month == date.month,
           isSameMonth: month == currentMonth,
           changeDate: changeDate,
@@ -50,16 +36,16 @@ class CalendarMonthGrid extends StatelessWidget {
 class CalendarMonthTile extends StatelessWidget {
   const CalendarMonthTile({
     Key? key,
+    required this.monthName,
     required this.month,
-    required this.title,
     required this.isSelected,
     required this.isSameMonth,
     required this.changeDate,
     required this.changeState,
   }) : super(key: key);
 
+  final String monthName;
   final int month;
-  final String title;
   final bool isSelected;
   final bool isSameMonth;
   final Function({int? day, int? month, int? year}) changeDate;
@@ -89,7 +75,7 @@ class CalendarMonthTile extends StatelessWidget {
         color: isSelected ? containerGreen : justWhite,
         child: Center(
           child: Text(
-            title,
+            monthName,
             style: TextStyle(
               color: fontColor,
               fontWeight: fontWeight,

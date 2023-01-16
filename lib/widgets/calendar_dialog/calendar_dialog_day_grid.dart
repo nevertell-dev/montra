@@ -36,27 +36,26 @@ class CalendarDayGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dayFirst = date.setDay(to: 1).weekday;
-    final dayOffset = dayFirst == 7 ? 0 : dayFirst;
-    final days = DateUtils.getDaysInMonth(date.year, date.month);
+    final firstWeekday = date.setDay(to: 1).weekday;
+    final offsetWeekday = firstWeekday == 7 ? 0 : firstWeekday;
+    final totalDay = DateUtils.getDaysInMonth(date.year, date.month);
     final today = DateTime.now().day;
-    final isSameMonth = DateUtils.isSameMonth(date, DateTime.now());
     return GridView.count(
       crossAxisCount: 7,
-      children: List<Widget>.generate(days + dayOffset, (index) {
+      children: List<Widget>.generate(totalDay + offsetWeekday, (index) {
         int day = index + 1;
 
-        if (dayFirst < 7) {
-          if (index < dayFirst) {
+        if (firstWeekday < 7) {
+          if (index < firstWeekday) {
             return const SizedBox();
           }
-          day = day - dayFirst;
+          day = day - firstWeekday;
         }
 
         return CalendarDayTile(
           day: day,
           isSelected: day == date.day,
-          isToday: isSameMonth && day == today,
+          isSameDay: day == today,
           changeDate: changeDate,
         );
       }),
@@ -69,23 +68,23 @@ class CalendarDayTile extends StatelessWidget {
     Key? key,
     required this.day,
     required this.isSelected,
+    required this.isSameDay,
     required this.changeDate,
-    this.isToday = false,
   }) : super(key: key);
 
   final int day;
   final bool isSelected;
+  final bool isSameDay;
   final Function({int? day, int? month, int? year}) changeDate;
-  final bool isToday;
 
   @override
   Widget build(BuildContext context) {
-    final fontSize = isSelected || isToday ? 20.0 : 14.0;
+    final fontSize = isSelected || isSameDay ? 20.0 : 14.0;
     final fontWeight =
-        isSelected || isToday ? FontWeight.w900 : FontWeight.w400;
+        isSelected || isSameDay ? FontWeight.w900 : FontWeight.w400;
     final fontColor = isSelected
         ? onContainerGreen
-        : isToday
+        : isSameDay
             ? onContainerYellow
             : onContainerBlue;
 
@@ -98,7 +97,7 @@ class CalendarDayTile extends StatelessWidget {
         color: isSelected ? containerGreen : justWhite,
         child: Center(
           child: Text(
-            (day).toString(),
+            day.toString(),
             style: TextStyle(
               color: fontColor,
               fontWeight: fontWeight,
