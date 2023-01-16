@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-extension ChangeDay on DateTime {
+extension DateChangerHelper on DateTime {
   DateTime setDay({required int to}) => DateTime(year, month, to);
   DateTime setMonth({required int to}) => DateTime(year, to, day);
   DateTime setYear({required int to}) => DateTime(to, month, day);
