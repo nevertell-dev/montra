@@ -11,6 +11,7 @@ abstract class HomeState extends Equatable {
 class HomeInitial extends HomeState {}
 
 class HomeLoaded extends HomeState {
+  final PageController pageController;
   final DateTime date;
   final int daysInMonth;
   final Daily? daily;
@@ -18,6 +19,7 @@ class HomeLoaded extends HomeState {
   final List<Transaction?> transactions;
 
   const HomeLoaded({
+    required this.pageController,
     required this.date,
     required this.daysInMonth,
     required this.daily,
@@ -33,6 +35,7 @@ class HomeLoaded extends HomeState {
       ];
 
   HomeLoaded copyWith({
+    PageController? pageController,
     DateTime? date,
     int? daysInMonth,
     Daily? daily,
@@ -40,6 +43,7 @@ class HomeLoaded extends HomeState {
     List<Transaction?>? transactions,
   }) {
     return HomeLoaded(
+      pageController: pageController ?? this.pageController,
       date: date ?? this.date,
       daysInMonth: daysInMonth ?? this.daysInMonth,
       daily: daily,

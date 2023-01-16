@@ -35,8 +35,12 @@ class HomeHeader extends StatelessWidget {
                     ),
                   );
                   if (pickedDate != null) {
-                    animatePageFunc(from: state.date, to: pickedDate);
                     bloc.add(HomeLoadTransaction(date: pickedDate));
+                    animatePageFunc(
+                      controller: state.pageController,
+                      from: state.date,
+                      to: pickedDate,
+                    );
                   }
                 },
                 child: Text(

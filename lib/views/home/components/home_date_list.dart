@@ -4,11 +4,9 @@ part of 'package:montra/views/home/home_view.dart';
 class HomeDateList extends StatelessWidget {
   const HomeDateList({
     Key? key,
-    required this.controller,
     required this.animatePageFunc,
   }) : super(key: key);
 
-  final PageController controller;
   final AnimatePageFunc animatePageFunc;
 
   @override
@@ -21,7 +19,7 @@ class HomeDateList extends StatelessWidget {
               height: 128.0,
               child: PageView.builder(
                 clipBehavior: Clip.none,
-                controller: controller,
+                controller: state.pageController,
                 onPageChanged: (value) {
                   final day = value + 1;
                   bloc.add(
@@ -59,7 +57,11 @@ class HomeDateTile extends StatelessWidget {
           final date = state.date.setDay(to: day);
           return GestureDetector(
             onTap: () async {
-              animatePageFunc(from: state.date, to: date);
+              animatePageFunc(
+                controller: state.pageController,
+                from: state.date,
+                to: date,
+              );
             },
             child: Stack(
               alignment: AlignmentDirectional.center,

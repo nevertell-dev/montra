@@ -1,22 +1,23 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
+
 import 'package:montra/models/category.dart';
 import 'package:montra/widgets/calendar_dialog/calendar_dialog.dart';
-import '../../constants/categories.dart';
-import '../../helpers/datetime_helper.dart';
-import '../../helpers/duration_helper.dart';
-import '../../services/transaction_service.dart';
 
+import '../../constants/categories.dart';
 import '../../constants/colors.dart';
 import '../../helpers/box_spacing.dart';
+import '../../helpers/datetime_helper.dart';
+import '../../helpers/duration_helper.dart';
 import '../../helpers/number_helper.dart';
+import '../../services/transaction_service.dart';
 import '../transaction/transaction_view.dart';
-
 import 'bloc/home_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'components/home_date_list.dart';
 part 'components/home_fab.dart';
@@ -24,7 +25,6 @@ part 'components/home_header.dart';
 part 'components/home_summary_card.dart';
 part 'components/home_transaction_list.dart';
 
-typedef AnimatePageFunc = void Function({DateTime? from, required DateTime to});
 typedef UpdateTransaction = Future<void> Function({
   required HomeLoaded state,
   required HomeBloc bloc,
@@ -34,34 +34,31 @@ typedef UpdateTransaction = Future<void> Function({
   Category? category,
 });
 
+typedef AnimatePageFunc = void Function({
+  required PageController controller,
+  DateTime? from,
+  required DateTime to,
+});
+
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  const HomeView({Key? key}) : super(key: key);
 
   @override
   State<HomeView> createState() => _HomeViewState();
 }
 
 class _HomeViewState extends State<HomeView> {
-  final _pageController = PageController(
-    viewportFraction: 0.15,
-    initialPage: DateUtils.dateOnly(DateTime.now()).day - 1,
-  );
+  late final PageController _pageController;
+  late final TransactionService _transactionService;
 
   @override
-  void dispose() {
-    _pageController.dispose();
-    super.dispose();
-  }
-
-  void animatePage({DateTime? from, required DateTime to}) {
-    final fromDay = from?.day ?? DateTime.now().day;
-    final duration = min((fromDay - to.day).abs(), 5) * 150;
-
-    _pageController.animateToPage(
-      to.day - 1,
-      duration: duration.millisecond,
-      curve: Curves.easeInOut,
+  void initState() {
+    _pageController = PageController(
+      viewportFraction: 0.15,
+      initialPage: DateUtils.dateOnly(DateTime.now()).day - 1,
     );
+    _transactionService = context.read<TransactionService>();
+    super.initState();
   }
 
   Future<void> updateTransaction({
@@ -83,17 +80,38 @@ class _HomeViewState extends State<HomeView> {
           ),
         ));
     if (newDate != null) {
-      animatePage(from: state.date, to: newDate);
+      animatePage(
+        controller: state.pageController,
+        from: state.date,
+        to: newDate,
+      );
       bloc.add(HomeLoadTransaction(date: newDate));
     }
   }
 
+  void animatePage({
+    required PageController controller,
+    DateTime? from,
+    required DateTime to,
+  }) {
+    final fromDay = from?.day ?? DateTime.now().day;
+    final duration = min((fromDay - to.day).abs(), 5) * 150;
+
+    controller.animateToPage(
+      to.day - 1,
+      duration: duration.millisecond,
+      curve: Curves.easeInOut,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final transactionService = context.read<TransactionService>();
     return BlocProvider(
       create: (context) {
-        return HomeBloc(transactionService)..add(HomeStarted());
+        return HomeBloc(
+          _transactionService,
+          _pageController,
+        )..add(HomeStarted());
       },
       child: SafeArea(
         child: BlocBuilder<HomeBloc, HomeState>(
@@ -107,16 +125,11 @@ class _HomeViewState extends State<HomeView> {
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: [
-                        HomeHeader(
-                          animatePageFunc: animatePage,
-                        ),
+                        HomeHeader(animatePageFunc: animatePage),
                         16.vSpace,
                         const HomeSummaryCard(),
                         16.vSpace,
-                        HomeDateList(
-                          controller: _pageController,
-                          animatePageFunc: animatePage,
-                        ),
+                        HomeDateList(animatePageFunc: animatePage),
                         16.vSpace,
                         HomeTransactionList(
                           updateTransactionFunc: updateTransaction,

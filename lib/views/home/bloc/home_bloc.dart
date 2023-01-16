@@ -3,7 +3,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart' show DateUtils;
+import 'package:flutter/material.dart' show DateUtils, PageController;
 import 'package:montra/helpers/datetime_helper.dart';
 
 import 'package:montra/services/transaction_service.dart';
@@ -15,10 +15,18 @@ part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final TransactionService transactionService;
+  final PageController pageController;
 
-  HomeBloc(this.transactionService) : super(HomeInitial()) {
+  HomeBloc(this.transactionService, this.pageController)
+      : super(HomeInitial()) {
     on<HomeEvent>((event, emit) => _homeEvent(event, emit),
         transformer: sequential());
+  }
+
+  @override
+  Future<void> close() {
+    pageController.dispose();
+    return super.close();
   }
 
   void _homeEvent(HomeEvent event, Emitter<HomeState> emit) async {
@@ -33,6 +41,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final monthlyRecord = transactionService.readMonthly(date.asMonthKey);
 
       emit(HomeLoaded(
+        pageController: pageController,
         date: date,
         daysInMonth: daysInMonth,
         daily: dailyRecord,
