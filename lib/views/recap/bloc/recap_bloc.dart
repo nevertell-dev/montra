@@ -32,19 +32,35 @@ class RecapBloc extends Bloc<RecapEvent, RecapState> {
           }
         }
 
-        var incomes = _getList<Income>(from: allTransactions);
-        var expenses = _getList<Expense>(from: allTransactions);
+        final incomes = _getList<Income>(from: allTransactions);
+        final expenses = _getList<Expense>(from: allTransactions);
+
+        final incomeMap = _getCategoryMap(incomes);
+        final expenseMap = _getCategoryMap(expenses);
+
+        final incomeTotal = _getTotal(incomes);
+        final expenseTotal = _getTotal(expenses);
 
         emit(RecapLoaded(
           date: event.date,
           incomes: incomes,
           expenses: expenses,
+          incomeMap: incomeMap,
+          expenseMap: expenseMap,
+          incomeTotal: incomeTotal,
+          expenseTotal: expenseTotal,
+          balance: incomeTotal - expenseTotal,
         ));
       } else {
         emit(RecapLoaded(
           date: event.date,
           incomes: const <Transaction?>[],
           expenses: const <Transaction?>[],
+          incomeMap: const <String, double>{},
+          expenseMap: const <String, double>{},
+          incomeTotal: 0,
+          expenseTotal: 0,
+          balance: 0,
         ));
       }
     });
@@ -62,5 +78,26 @@ class RecapBloc extends Bloc<RecapEvent, RecapState> {
     }
 
     return <Transaction>[];
+  }
+
+  Map<String, double> _getCategoryMap(List<Transaction?> transactions) {
+    final mappedTransactions = <String, double>{};
+    for (var transaction in transactions) {
+      if (transaction != null) {
+        var amount = transaction.amount;
+        var title = transaction.category.title;
+
+        amount += mappedTransactions[title] ?? 0;
+
+        mappedTransactions[transaction.category.title] = amount;
+      }
+    }
+    return mappedTransactions;
+  }
+
+  double _getTotal(List<Transaction?> transactions) {
+    return transactions
+        .map((e) => e?.amount ?? 0)
+        .reduce((value, element) => value + element);
   }
 }

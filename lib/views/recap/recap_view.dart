@@ -1,9 +1,20 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+
+import 'package:montra/constants/categories.dart';
+import 'package:montra/helpers/box_spacing.dart';
+import 'package:montra/helpers/number_helper.dart';
 import 'package:montra/services/transaction_service.dart';
 
+import '../../constants/colors.dart';
+import '../../models/category.dart';
 import 'bloc/recap_bloc.dart';
+
+part './components/recap_header.dart';
+part './components/recap_category_list.dart';
+part './components/recap_balance.dart';
 
 class RecapView extends StatelessWidget {
   const RecapView({
@@ -26,14 +37,15 @@ class RecapView extends StatelessWidget {
                 body: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Text('Total Income'),
-                      const Text('Income rank in this month'),
-                      Text(state.incomes.toString()),
-                      const Text('Total Expense'),
-                      const Text('Expense rank in this month'),
-                      Text(state.expenses.toString()),
+                      RecapHeader(date: state.date),
+                      32.vSpace,
+                      RecapBalance(balance: state.balance),
+                      32.vSpace,
+                      RecapCategoryList<Income>(),
+                      32.vSpace,
+                      RecapCategoryList<Expense>(),
                     ],
                   ),
                 ),
