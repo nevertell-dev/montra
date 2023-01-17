@@ -96,6 +96,10 @@ class RecapBloc extends Bloc<RecapEvent, RecapState> {
   }
 
   double _getTotal(List<Transaction?> transactions) {
+    if (transactions.isEmpty) {
+      return 0;
+    }
+
     return transactions
         .map((e) => e?.amount ?? 0)
         .reduce((value, element) => value + element);
