@@ -65,6 +65,9 @@ class TransactionService {
       note: note,
     );
 
+    final origin = readTransaction(key);
+    deleteTransaction(origin!);
+
     await _transactions.put(key, transaction);
     await updateRecords(key: key, date: date);
   }

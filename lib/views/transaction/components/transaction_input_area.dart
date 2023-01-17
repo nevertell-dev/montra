@@ -110,6 +110,7 @@ class _InputAreaAmountState extends State<InputAreaAmount> {
             },
             child: TextField(
               controller: _controller,
+              autofocus: true,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               keyboardType: TextInputType.number,
               textAlign: TextAlign.center,
