@@ -57,7 +57,7 @@ class HomeDateTile extends StatelessWidget {
           final date = state.date.setDay(to: day);
           return GestureDetector(
             onTap: () async {
-              animatePageFunc(
+              await animatePageFunc(
                 controller: state.pageController,
                 from: state.date,
                 to: date,

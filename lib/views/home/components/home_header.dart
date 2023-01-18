@@ -30,7 +30,7 @@ class HomeHeader extends StatelessWidget {
                   );
                   if (pickedDate != null) {
                     bloc.add(HomeLoadTransaction(date: pickedDate));
-                    animatePageFunc(
+                    await animatePageFunc(
                       controller: state.pageController,
                       from: state.date,
                       to: pickedDate,

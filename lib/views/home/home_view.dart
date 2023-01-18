@@ -35,7 +35,7 @@ typedef UpdateTransaction = Future<void> Function({
   Category? category,
 });
 
-typedef AnimatePageFunc = void Function({
+typedef AnimatePageFunc = Future<void> Function({
   required PageController controller,
   DateTime? from,
   required DateTime to,
@@ -81,24 +81,25 @@ class _HomeViewState extends State<HomeView> {
           ),
         ));
     if (newDate != null) {
-      animatePage(
+      await animatePage(
         controller: state.pageController,
         from: state.date,
         to: newDate,
       );
+
       bloc.add(HomeLoadTransaction(date: newDate));
     }
   }
 
-  void animatePage({
+  Future<void> animatePage({
     required PageController controller,
     DateTime? from,
     required DateTime to,
-  }) {
+  }) async {
     final fromDay = from?.day ?? DateTime.now().day;
     final duration = min((fromDay - to.day).abs(), 5) * 150;
 
-    controller.animateToPage(
+    await controller.animateToPage(
       to.day - 1,
       duration: duration.millisecond,
       curve: Curves.easeInOut,
