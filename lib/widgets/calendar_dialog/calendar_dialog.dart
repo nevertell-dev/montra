@@ -82,6 +82,7 @@ class _CalendarDialogState extends State<CalendarDialog>
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      backgroundColor: const Color(0xFFFFFFFF),
       insetPadding: const EdgeInsets.symmetric(vertical: 200, horizontal: 24),
       alignment: AlignmentDirectional.center,
       child: Padding(

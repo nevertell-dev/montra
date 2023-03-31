@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "404040605377",
+    "project_id": "flutter-montra",
+    "storage_bucket": "flutter-montra.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:404040605377:android:df84e6dc66409f9e1f3e40",
+        "android_client_info": {
+          "package_name": "com.nevertell.montra"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "404040605377-c6rnbj442qr07m25409ou7vipmion2sl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmo_rlJ3bwnU_ahRUGpCK4ioLQ85h0Vac"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "404040605377-c6rnbj442qr07m25409ou7vipmion2sl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

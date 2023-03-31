@@ -39,7 +39,7 @@ class CalendarDayGrid extends StatelessWidget {
     final firstWeekday = date.setDay(to: 1).weekday;
     final offsetWeekday = firstWeekday == 7 ? 0 : firstWeekday;
     final totalDay = DateUtils.getDaysInMonth(date.year, date.month);
-    final today = DateTime.now().day;
+    final today = DateTime.now();
     return GridView.count(
       crossAxisCount: 7,
       children: List<Widget>.generate(totalDay + offsetWeekday, (index) {
@@ -55,7 +55,7 @@ class CalendarDayGrid extends StatelessWidget {
         return CalendarDayTile(
           day: day,
           isSelected: day == date.day,
-          isSameDay: day == today,
+          isSameDay: DateUtils.isSameDay(today, date.setDay(to: day)),
           changeDate: changeDate,
         );
       }),

@@ -49,15 +49,11 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  late final PageController _pageController;
+  late PageController _pageController;
   late final TransactionService _transactionService;
 
   @override
   void initState() {
-    _pageController = PageController(
-      viewportFraction: 0.15,
-      initialPage: DateUtils.dateOnly(DateTime.now()).day - 1,
-    );
     _transactionService = context.read<TransactionService>();
     super.initState();
   }
@@ -108,6 +104,10 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
+    _pageController = PageController(
+      viewportFraction: MediaQuery.of(context).size.width <= 800 ? 0.15 : 0.05,
+      initialPage: DateUtils.dateOnly(DateTime.now()).day - 1,
+    );
     return BlocProvider(
       create: (context) {
         return HomeBloc(
@@ -120,6 +120,7 @@ class _HomeViewState extends State<HomeView> {
           builder: (context, state) {
             if (state is HomeLoaded) {
               return Scaffold(
+                  backgroundColor: const Color(0xFFFFFFFF),
                   floatingActionButton: HomeFab(
                     updateTransactionFunc: updateTransaction,
                   ),

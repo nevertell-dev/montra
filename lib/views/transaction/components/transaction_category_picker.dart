@@ -25,17 +25,17 @@ class TransactionCategoryPicker extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Scaffold(
+                backgroundColor: const Color(0xFFFFFFFF),
                 appBar: TabBar(
                   overlayColor: MaterialStateColor.resolveWith((states) {
                     return Colors.transparent;
                   }),
+                  dividerColor: Colors.transparent,
                   labelColor: onContainerGreen,
                   labelStyle: _textStyle,
                   unselectedLabelColor: onContainerBlue,
                   unselectedLabelStyle: _unselectedTextStyle,
-                  indicator: BoxDecoration(
-                      color: containerGreen,
-                      borderRadius: BorderRadius.circular(30.0)),
+                  indicator: const UnderlineTabIndicator(),
                   tabs: const [
                     Tab(text: 'Expense'),
                     Tab(text: 'Income'),

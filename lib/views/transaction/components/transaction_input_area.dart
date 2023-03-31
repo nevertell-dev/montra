@@ -148,6 +148,7 @@ class InputAreaCategory extends StatelessWidget {
           return TextButton(
             onPressed: () async {
               showModalBottomSheet(
+                backgroundColor: const Color(0xFFFFFFFF),
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(32),
